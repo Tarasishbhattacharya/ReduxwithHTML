@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redux with html</title>
+</head>
+<body>
+    <h3>Todo List</h3>
+    <input type="text"  id="todo_item" placeholder="todo.....">
+    <input type="text"  id="todo_prior" placeholder="Priority(Ex:urgent)">
+    <button id="btn">Submit</button>
+
+   <table>
+       <thead>
+           <tr>
+               <th>Item</th>
+               <th>Priority</th>
+           </tr>
+       </thead>
+       <tbody></tbody>
+   </table>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/redux/4.0.0-beta.1/redux.min.js"></script>
+<script>
+ const reducer=(store=[],action)=>{
+     if(action.type==="ADD_TODO"){
+         return [...store,action.payload]
+     }
+ }
+  
+ 
+
+const store=Redux.createStore(reducer)
+store.subscribe(()=> {
+  document.querySelector("tbody").innerHTML="";
+  store.getState().forEach(list => {
+      const table_row = document.createElement("tr");
+      
+      const td1 = document.createElement("td");
+      td1.textContent=list.value;
+      
+      const td2 = document.createElement("td");
+      td2.textContent=list.status;
+      
+      //td2.addEventListener("click", handleChange());
+         
+      table_row.append(td1,td2);
+      document.querySelector("tbody").append(table_row);
+
+  });
+});
+
+
+    document.querySelector("#btn").addEventListener("click",(e)=>{
+        e.preventDefault();
+        var list=document.querySelector("#todo_item").value;
+        var prior=document.querySelector("#todo_prior").value
+        console.log(list)
+        store.dispatch({type:"ADD_TODO",payload:{value:list,status:prior}})
+    })
+</script>
+</html>
